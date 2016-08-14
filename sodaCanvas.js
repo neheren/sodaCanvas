@@ -20,13 +20,14 @@ function rect(_x, _y, _width, _height, _color) {
 
 		var oldPosition = this[parameter];
 		var distance = newPosition - oldPosition;
-		console.log({oldPosition}, {newPosition}, {distance})
+			console.log({oldPosition}, {newPosition}, {distance})
 
 		var linearRatio = (totalFrames / easing(totalFrames));
 		var timeRatio = distance / totalFrames;
+			console.log({timeRatio, linearRatio})
 
 		var clock = setInterval(() => {
-			this[parameter] = easing(currentFrame) * linearRatio * timeRatio + oldPosition
+			this[parameter] = oldPosition + easing(currentFrame, totalFrames) * linearRatio * timeRatio
 			currentFrame++;
 
 			if(currentFrame > totalFrames) clearInterval(clock);
@@ -42,24 +43,27 @@ var bg = new rect(0, 0, 1000, 700, "#EEEEEE");
 var sodaRect = new rect(100, 100, 30, 30, "red");
 
 
-function draw(){	
+function draw(){
 	bg.draw();
 	sodaRect.draw();
 }
 
-var easing = function(t){
+var easing = function(t, totalFrames){
+
 	//return 1+(--t)*t*t*t*t
-	return Math.pow(t, 0.3)
+	ret = t / Math.sqrt(1 + Math.pow(t, 2)) - 0.5
+	console.log(ret)
+	return ret
 }
 
 $( document ).ready(() => {
 	$( document ).click( () => {
 		var x = event.clientX;
 		var y = event.clientY;
-		sodaRect.animate('x', x, easing, 1000)
-		.then(() => (sodaRect.animate('y', y, easing, 500)))
+		sodaRect.animate('x', x, easing, 500)
+		/*.then(() => (sodaRect.animate('y', y, easing, 500)))
 		.then(() => (sodaRect.animate('x', (0), easing, 500)))
-		.then(() => (sodaRect.animate('y', (0), easing, 500)))
+		.then(() => (sodaRect.animate('y', (0), easing, 500)))*/
 	})
 })
 
