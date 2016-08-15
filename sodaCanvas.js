@@ -8,6 +8,7 @@ function rect(_x, _y, _width, _height, _color) {
 	this.height = _height;
 	this.color = _color;
 	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
+	this.newAnimation
 
 	this.draw = () => {
 		ctx.fillStyle = this.color;
@@ -15,15 +16,14 @@ function rect(_x, _y, _width, _height, _color) {
 	};
 
 	this.animate = (parameter, newPosition, easing, totalTime) => { //gør mere generical skal kunne modtage json amimaTIONER og sende dem aftsted til denne function 
-		clearInterval(clock)
 		
 		var currentFrame = 0; 				var totalFrames = totalTime / 1000 * frameRate; 
 		var start = this[parameter]; 		var end = newPosition - this[parameter];
 
 		var clock = setInterval(() => {
 			console.log(parameter +': ' + this[parameter])
-			elaspedTime = currentFrame / frameRate * 1000;
-			percentageDone = currentFrame / totalFrames; 
+			var elaspedTime = currentFrame / frameRate * 1000;
+			var percentageDone = currentFrame / totalFrames; 
 
 			this[parameter] = easing(percentageDone, elaspedTime, start, end, totalTime)
 			currentFrame++;
