@@ -1,6 +1,7 @@
 var c = document.getElementById("sodaCanvas");
 var ctx = c.getContext("2d");
 var frameRate = 50;
+
 function rect(_x, _y, _width, _height, _color) {
 	this.x = _x;
 	this.y = _y;
@@ -14,28 +15,41 @@ function rect(_x, _y, _width, _height, _color) {
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 	};
 
-	this.animate = (parameter, newPosition, easing, totalTime) => { //gør mere generical skal kunne modtage json amimaTIONER og sende dem aftsted til denne function 
-		clearInterval(clock)
+	this.animate = (animationObject, easing, totalTime) => { //gør mere generical skal kunne modtage json amimaTIONER og sende dem aftsted til denne function 
 		
-		var currentFrame = 0; 				var totalFrames = totalTime / 1000 * frameRate; 
-		var start = this[parameter]; 		var end = newPosition - this[parameter];
+		var parameterKey = Object.keys(animationObject);
+		
+		for(var i = 0; i < parameterKey.length; i++){
+			var currentParameterKey = parameterKey[i];
 
-		var clock = setInterval(() => {
-			console.log(parameter +': ' + this[parameter])
-			elaspedTime = currentFrame / frameRate * 1000;
-			percentageDone = currentFrame / totalFrames; 
+			var newPosition = animationObject[currentParameterKey]
+			
+			var currentFrame = 0; 					
+			var totalFrames = totalTime / 1000 * frameRate; 
+			var start = this[currentParameterKey]; 		
+			var end = newPosition - this[currentParameterKey];
+			var clock = setInterval(() => {
+				console.log( (currentParameterKey) +': ' + this[currentParameterKey])
+				
+				var elaspedTime = currentFrame / frameRate * 1000; 
+				var percentageDone = currentFrame / totalFrames; 
 
-			this[parameter] = easing(percentageDone, elaspedTime, start, end, totalTime)
-			currentFrame++;
+				console.log(percentageDone, elaspedTime, start, end, totalTime)
 
-			if(currentFrame > totalFrames) clearInterval(clock);
-		}, (1000/frameRate))
+				this[currentParameterKey] = easing(percentageDone, elaspedTime, start, end, totalTime)
+				currentFrame++;
 
+				if(currentFrame > totalFrames) clearInterval(clock);
+			}, (1000/frameRate))
+
+		}
 		return new Promise((resolve, reject) => {
-			console.log('new')//ensuring the position is 100% correct no matter the animation
+			console.log('new') //ensuring the position is 100% correct no matter the animation
 			setInterval(resolve, totalTime)
-		});
+		});			
+	
 	}
+
 };
 
 setInterval(() => draw(), (1000/frameRate))
@@ -56,10 +70,8 @@ $( document ).ready(() => {
 	$( document ).click( () => {
 		var x = event.clientX;
 		var y = event.clientY;
-		sodaRect.animate('x', x, easing.easeInOutExpo, 1000)
-		sodaRect.animate('y', y, easing.easeInOutExpo, 1000).then(() => {
-			sodaRect.animate('x', 0, easing.easeInOutExpo, 1000);
-			sodaRect.animate('y', 0, easing.easeInOutExpo, 1000);
+		sodaRect.animate({x: x}, easing.easeInOutExpo, 1000).then(() => {
+
 		})
 	})
 })
