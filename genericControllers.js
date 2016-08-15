@@ -47,9 +47,13 @@ sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 			var elaspedTime = currentFrame / frameRate * 1000;
 			var percentageDone = currentFrame / totalFrames; 
 
-			if(this.breakAnimation){
+			if(this.breakAnimation === parameter || this.breakAnimation === true){
 				clearInterval(clock);
-				this.currentlyAnimating = new Array();
+				console.log(this.currentlyAnimating)
+				var indexOfParameter = this.currentlyAnimating.indexOf(parameter);
+				console.log(indexOfParameter) //deleting animations from array.
+				this.currentlyAnimating.splice(indexOfParameter, 1);
+				console.log(this.currentlyAnimating)
 				currentFrame = totalFrames + 1 // simple way of going into the if below
 				resolve();
 			}
@@ -73,7 +77,9 @@ sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 
 
 sodaCanvas.animate = function(animations, easing, totalTime) {
+	console.log('now animating ' + this.currentlyAnimating)
 	for (var i = 0; i < this.currentlyAnimating.length; i++) {//checking if object is already animating:
+
 	    if (Object.keys(animations).indexOf(this.currentlyAnimating[i]) !== -1) {
 	    	return new Promise( (resolve, reject) => 
 	    		reject('Parameter ' + this.currentlyAnimating[i] + ' is already being animated. Use .break() method to cancel animation, or wait for the animation to complete') 
@@ -89,15 +95,16 @@ sodaCanvas.animate = function(animations, easing, totalTime) {
 			.then(resolve);
 		});
 	}
-	return Promise.all(promises).then(() => this.breakAnimation = false)
+	return Promise.all(promises).then(() => this.breakAnimation = null)
 };
 
 
 
-sodaCanvas.break = function() {
+sodaCanvas.break = function(parameter) {
 	return new Promise((resolve, reject) => {
 		if(this.currentlyAnimating.length > 0){
-			this.breakAnimation = true;
+			this.breakAnimation = parameter;
+			console.log({breaking: this.breakAnimation})
 			setTimeout(resolve, 20)
 		}else{resolve('nothings animating')}
 	});

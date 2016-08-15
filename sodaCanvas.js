@@ -12,7 +12,7 @@ function rect(_x, _y, _width, _height, _color) {
 	this.height = _height;
 	this.color = _color;
 	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
-	this.breakAnimation = false;
+	this.breakAnimation = null;
 
 	this.draw = () => {
 		ctx.fillStyle = this.color;

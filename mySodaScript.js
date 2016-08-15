@@ -16,13 +16,12 @@ $( document ).ready(() => {
 	$( document ).click( () => {
 		var x = event.clientX;
 		var y = event.clientY;
-		sodaRect.break().then(() => {
+
+		sodaRect.break('x').then(() => {
 			sodaRect.animate({
-				x: Math.random() * 500, 
-				y: Math.random() * 500, 
-				width: 10+(Math.random() * 500),
-				height: 10+(Math.random() * 500), 
-			}, easing.easeInOutExpo, 1000)//.then(()=>loop())
-		})
+				x: x,
+				y: y,
+			}, easing.easeInOutExpo, 1000)
+		})//.then(()=>loop())
 	})
 })
