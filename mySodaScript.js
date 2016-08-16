@@ -13,15 +13,26 @@ function draw(){
 }
 
 $( document ).ready(() => {
+	loop()
 	$( document ).click( () => {
+		
 		var x = event.clientX;
 		var y = event.clientY;
 
-		sodaRect.break('x').then(() => {
-			sodaRect.animate({
-				x: x,
-				y: y,
-			}, easing.easeInOutExpo, 1000)
-		})//.then(()=>loop())
-	})
+		sodaRect.animate({
+			x: x,
+		}, easing.easeInOutExpo, 2000)
+	})//.then(()=>loop())
 })
+
+function loop(){
+	if(sodaRect.y < 300){
+		sodaRect.animate({
+			y: 500,
+		}, easing.easeInOutExpo, 1000).then(() => loop())
+	}else{
+		sodaRect.animate({
+			y: 0,
+		}, easing.easeInOutExpo, 1000).then(() => loop())
+	}
+}

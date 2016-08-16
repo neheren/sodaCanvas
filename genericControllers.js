@@ -35,58 +35,56 @@ var sodaCanvas = {};
 
 sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 	return new Promise((resolve, reject) => {
+		//console.log('now breaking ' + parameter + ', and waiting for promise')
+		this.break(parameter).then((debug) => {
+			//console.log('promise recieved, with message: ' + debug )
+			this.currentlyAnimating.push(parameter);
 
-		this.currentlyAnimating.push(parameter);
+			var currentFrame = 0; 				
+			var totalFrames = totalTime / 1000 * frameRate; 
+			var start = this[parameter]; 		
+			var end = newPosition - this[parameter];
 
-		var currentFrame = 0; 				
-		var totalFrames = totalTime / 1000 * frameRate; 
-		var start = this[parameter]; 		
-		var end = newPosition - this[parameter];
+			var clock = setInterval(() => {
+				var elaspedTime = currentFrame / frameRate * 1000;
+				var percentageDone = currentFrame / totalFrames; 
 
-		var clock = setInterval(() => {
-			var elaspedTime = currentFrame / frameRate * 1000;
-			var percentageDone = currentFrame / totalFrames; 
+				for (var i = 0; i < this.breakAnimation.length; i++) {
+					if(this.breakAnimation[i] === parameter){
+						clearInterval(clock);
+						//console.log(this.currentlyAnimating)
+						
+						//deleting animations from array:
+						this.currentlyAnimating.splice(this.currentlyAnimating.indexOf(parameter), 1);
+						
+						//and from break Array:
+						this.breakAnimation.splice(this.breakAnimation.indexOf(parameter), 1);
+						
+						console.log('deleted ' + parameter + ' from ' + this.breakAnimation)
+						currentFrame = totalFrames + 1 // simple way of going into the if below
+					}
+				}
 
-			if(this.breakAnimation === parameter || this.breakAnimation === true){
-				clearInterval(clock);
-				console.log(this.currentlyAnimating)
-				var indexOfParameter = this.currentlyAnimating.indexOf(parameter);
-				console.log(indexOfParameter) //deleting animations from array.
-				this.currentlyAnimating.splice(indexOfParameter, 1);
-				console.log(this.currentlyAnimating)
-				currentFrame = totalFrames + 1 // simple way of going into the if below
-				resolve();
-			}
+				if(currentFrame > totalFrames){
+					clearInterval(clock) //clearing timer, and resolving promise
+					resolve();
 
-			if(currentFrame > totalFrames){
-				clearInterval(clock) //clearing timer, and resolving promise
-				resolve();
+					var indexOfParameter = this.currentlyAnimating.indexOf(parameter); //deleting animations from array.
+					this.currentlyAnimating.splice(indexOfParameter, 1);
+				
+				}else{ 
+					this[parameter] = easing(percentageDone, elaspedTime, start, end, totalTime)
+					currentFrame++;
+				}
 
-				var indexOfParameter = this.currentlyAnimating.indexOf(parameter); //deleting animations from array.
-				this.currentlyAnimating.splice(indexOfParameter, 1);
-			
-			}else{ 
-				this[parameter] = easing(percentageDone, elaspedTime, start, end, totalTime)
-				currentFrame++;
-			}
-
-		}, (1000/frameRate))
+			}, (1000/frameRate))
+		})
 	});
 }
 
 
 
 sodaCanvas.animate = function(animations, easing, totalTime) {
-	console.log('now animating ' + this.currentlyAnimating)
-	for (var i = 0; i < this.currentlyAnimating.length; i++) {//checking if object is already animating:
-
-	    if (Object.keys(animations).indexOf(this.currentlyAnimating[i]) !== -1) {
-	    	return new Promise( (resolve, reject) => 
-	    		reject('Parameter ' + this.currentlyAnimating[i] + ' is already being animated. Use .break() method to cancel animation, or wait for the animation to complete') 
-	    	)
-	    }
-	}
-
 	var promises = new Array();
 	for(var i=0; i < Object.keys(animations).length;i++) {
 		promises[i] = new Promise((resolve, reject) => {
@@ -95,18 +93,27 @@ sodaCanvas.animate = function(animations, easing, totalTime) {
 			.then(resolve);
 		});
 	}
-	return Promise.all(promises).then(() => this.breakAnimation = null)
+	//console.log('now animating ' + this.currentlyAnimating)
+	return Promise.all(promises).then(() => this.breakAnimation = new Array)
 };
 
 
 
 sodaCanvas.break = function(parameter) {
 	return new Promise((resolve, reject) => {
-		if(this.currentlyAnimating.length > 0){
-			this.breakAnimation = parameter;
-			console.log({breaking: this.breakAnimation})
-			setTimeout(resolve, 20)
-		}else{resolve('nothings animating')}
+		
+		for (var i = 0; i < this.currentlyAnimating.length; i++) {//checking if object is already animating:
+		    if (this.currentlyAnimating[i] == parameter) {
+				this.breakAnimation.push(parameter); 
+				setTimeout(() => resolve('breaking parameter: ' + parameter), 200)
+				console.log('breaking parameter: ' + parameter)
+			}else{
+				resolve(parameter + ' is not animating so is not being breaked')}
+				console.log(parameter + ' is not animating so is not being breaked')
+		}
+		if(this.currentlyAnimating.length == 0){
+			resolve('nothing is animating, nothing to break')
+		}
 	});
 }
 
