@@ -4,15 +4,19 @@ var frameRate = 60;
 
 
 function rect(_x, _y, _width, _height, _color) {
-
+	this.emptyPromise = (parameter) => {
+		return new Promise((resolve, reject) => resolve()) 
+	};
 	this.currentlyAnimating = new Array();
+	this.breakAnimation = new Array();
+
 	this.x = _x;
 	this.y = _y;
 	this.width = _width;
 	this.height = _height;
 	this.color = _color;
 	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
-	this.breakAnimation = false;
+	
 
 	this.draw = () => {
 		ctx.fillStyle = this.color;

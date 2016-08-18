@@ -25,6 +25,11 @@ easing = {
 			t--;
 			return c/2 * ( -Math.pow( 2, -10 * t) + 2 ) + b;
 		},
+
+	easeOutExpo :
+		function (x, t, b, c, d) {
+			return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
+		},
 }
 
 
@@ -32,55 +37,70 @@ easing = {
 var sodaCanvas = {};
 
 
-
 sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 	return new Promise((resolve, reject) => {
 
-		this.currentlyAnimating.push(parameter);
-
-		var currentFrame = 0; 				
-		var totalFrames = totalTime / 1000 * frameRate; 
-		var start = this[parameter]; 		
-		var end = newPosition - this[parameter];
-
-		var clock = setInterval(() => {
-			var elaspedTime = currentFrame / frameRate * 1000;
-			var percentageDone = currentFrame / totalFrames; 
-
-			if(this.breakAnimation){
-				clearInterval(clock);
-				this.currentlyAnimating = new Array();
-				currentFrame = totalFrames + 1 // simple way of going into the if below
-				resolve();
+		var runThisPromise = 'emptyPromise'
+		for (var i = 0; i < this.currentlyAnimating.length; i++) {	// checking if object is already animating:
+		    if (this.currentlyAnimating[i] == parameter) {
+				runThisPromise = 'break';
 			}
+		}
 
-			if(currentFrame > totalFrames){
-				clearInterval(clock) //clearing timer, and resolving promise
-				resolve();
+		this[runThisPromise](parameter).then((debug) => { 			// if an object is running the runThisPromise will be 'Break' else it will be an empty instant resolving promise
+			this.currentlyAnimating.push(parameter);
 
-				var indexOfParameter = this.currentlyAnimating.indexOf(parameter); //deleting animations from array.
-				this.currentlyAnimating.splice(indexOfParameter, 1);
-			
-			}else{ 
-				this[parameter] = easing(percentageDone, elaspedTime, start, end, totalTime)
-				currentFrame++;
-			}
+			var breakThis = false 
+			var currentFrame = 0; 				
+			var totalFrames = totalTime / 1000 * frameRate; 
+			var start = this[parameter]; 		
+			var end = newPosition - this[parameter];
 
-		}, (1000/frameRate))
+			var clock = setInterval(() => {
+				var elaspedTime = currentFrame / frameRate * 1000;
+				var percentageDone = currentFrame / totalFrames; 
+
+				for (var i = 0; i < this.breakAnimation.length; i++) {
+					if(this.breakAnimation[i] === parameter){ // if i
+						clearInterval(clock);
+
+						this.currentlyAnimating.splice(this.currentlyAnimating.indexOf(parameter), 1); 	//deleting animations from array:
+						
+						this.breakAnimation.splice(this.breakAnimation.indexOf(parameter), 1); 			//and from break Array:
+						
+						console.log( 'deleted ' + parameter + ' left: ' + (this.breakAnimation[i] ? this.breakAnimation[i] : 'nothing') );
+						breakThis = true;
+					}
+
+					if(this.breakAnimation.length > 0 && i == this.breakAnimation.length){
+						clearInterval(clock)
+						resolve();
+						breakThis = true;
+					}
+				}
+
+				if(currentFrame > totalFrames) {
+					clearInterval(clock) //clearing timer, and resolving promise
+					resolve();
+
+					var indexOfParameter = this.currentlyAnimating.indexOf(parameter); //deleting animations from array.
+					this.currentlyAnimating.splice(indexOfParameter, 1);
+					breakThis = true;
+				}
+
+				if(!breakThis) { 
+					this[parameter] = easing(percentageDone, elaspedTime, start, end, totalTime)
+					currentFrame++;
+				}
+
+			}, (1000/frameRate))
+		})
 	});
 }
 
 
 
 sodaCanvas.animate = function(animations, easing, totalTime) {
-	for (var i = 0; i < this.currentlyAnimating.length; i++) {//checking if object is already animating:
-	    if (Object.keys(animations).indexOf(this.currentlyAnimating[i]) !== -1) {
-	    	return new Promise( (resolve, reject) => 
-	    		reject('Parameter ' + this.currentlyAnimating[i] + ' is already being animated. Use .break() method to cancel animation, or wait for the animation to complete') 
-	    	)
-	    }
-	}
-
 	var promises = new Array();
 	for(var i=0; i < Object.keys(animations).length;i++) {
 		promises[i] = new Promise((resolve, reject) => {
@@ -89,17 +109,17 @@ sodaCanvas.animate = function(animations, easing, totalTime) {
 			.then(resolve);
 		});
 	}
-	return Promise.all(promises).then(() => this.breakAnimation = false)
+	//console.log('now animating ' + this.currentlyAnimating)
+	return Promise.all(promises).then(() => this.breakAnimation = new Array)
 };
 
 
 
-sodaCanvas.break = function() {
+sodaCanvas.break = function(parameter) {
 	return new Promise((resolve, reject) => {
-		if(this.currentlyAnimating.length > 0){
-			this.breakAnimation = true;
-			setTimeout(resolve, 20)
-		}else{resolve('nothings animating')}
+		if(this.currentlyAnimating)
+		this.breakAnimation.push(parameter);
+		resolve();
 	});
 }
 

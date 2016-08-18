@@ -7,22 +7,21 @@ var sodaRect = new rect(100, 100, 30, 30, "grey");
 
 console.log('yo')
 
-function draw(){
+function draw(event){
 	bg.draw();
 	sodaRect.draw();
+	sodaRect.x = event.clientX
 }
 
 $( document ).ready(() => {
 	$( document ).click( () => {
+		
 		var x = event.clientX;
 		var y = event.clientY;
-		sodaRect.break().then(() => {
-			sodaRect.animate({
-				x: Math.random() * 500, 
-				y: Math.random() * 500, 
-				width: 10+(Math.random() * 500),
-				height: 10+(Math.random() * 500), 
-			}, easing.easeInOutExpo, 1000)//.then(()=>loop())
-		})
-	})
+
+		sodaRect.animate({
+			x: x,
+			y: y
+		}, easing.easeOutExpo, 2000)
+	})//.then(()=>loop())
 })
