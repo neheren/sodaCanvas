@@ -10,18 +10,29 @@ console.log('yo')
 function draw(event){
 	bg.draw();
 	sodaRect.draw();
-	sodaRect.x = event.clientX
 }
 
 $( document ).ready(() => {
 	$( document ).click( () => {
 		
+		sodaRect.animate({
+			rColor: Math.random()*256,
+			bColor: Math.random()*256,
+			gColor: Math.random()*256,
+		}, easing.easeOutExpo, 2000)
+
 		var x = event.clientX;
 		var y = event.clientY;
 
 		sodaRect.animate({
+			width:100,
+			height:100,
 			x: x,
-			y: y
+			y: y,
 		}, easing.easeOutExpo, 2000)
+		.then(() => sodaRect.animate({
+			width:50,
+			height:50,
+		}, easing.easeInQuad, 1000) )
 	})//.then(()=>loop())
 })
