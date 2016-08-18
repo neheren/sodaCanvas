@@ -29,10 +29,10 @@ $( document ).ready(() => {
 			height:100,
 			x: x,
 			y: y,
-		}, easing.easeOutExpo, 2000)
+		}, easing.easeInExpo, 1000)
 		.then(() => sodaRect.animate({
 			width:50,
 			height:50,
-		}, easing.easeInQuad, 1000) )
+		}, easing.easeInQuad, 500) )
 	})//.then(()=>loop())
 })
