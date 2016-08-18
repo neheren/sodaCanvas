@@ -7,13 +7,13 @@ var sodaRect = new rect(100, 100, 30, 30, "grey");
 
 console.log('yo')
 
-function draw(){
+function draw(event){
 	bg.draw();
 	sodaRect.draw();
+	sodaRect.x = event.clientX
 }
 
 $( document ).ready(() => {
-	loop()
 	$( document ).click( () => {
 		
 		var x = event.clientX;
@@ -21,18 +21,7 @@ $( document ).ready(() => {
 
 		sodaRect.animate({
 			x: x,
-		}, easing.easeInOutExpo, 2000)
+			y: y
+		}, easing.easeOutExpo, 2000)
 	})//.then(()=>loop())
 })
-
-function loop(){
-	if(sodaRect.y < 300){
-		sodaRect.animate({
-			y: 500,
-		}, easing.easeInOutExpo, 1000).then(() => loop())
-	}else{
-		sodaRect.animate({
-			y: 0,
-		}, easing.easeInOutExpo, 1000).then(() => loop())
-	}
-}

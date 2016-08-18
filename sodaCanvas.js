@@ -4,7 +4,9 @@ var frameRate = 60;
 
 
 function rect(_x, _y, _width, _height, _color) {
-
+	this.emptyPromise = (parameter) => {
+		return new Promise((resolve, reject) => resolve()) 
+	};
 	this.currentlyAnimating = new Array();
 	this.breakAnimation = new Array();
 
