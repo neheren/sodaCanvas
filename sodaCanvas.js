@@ -2,6 +2,14 @@ var c = document.getElementById("sodaCanvas");
 var ctx = c.getContext("2d");
 var frameRate = 60;
 
+var onClick = document.createAttribute("onclick")
+onClick.value = 'mouseClick(event)'
+c.setAttributeNode(onClick);
+
+function mouseClick(event){
+	console.log(event)
+}
+
 
 function rect(_x, _y, _width, _height, _color) {
 	this.emptyPromise = (parameter) => new Promise((resolve, reject) => resolve()) 
@@ -35,9 +43,12 @@ function rect(_x, _y, _width, _height, _color) {
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 	};
 
+	
+	
 	this.break = sodaCanvas.break
 	this.animateSingle = sodaCanvas.animateSingle;
 	this.animate = sodaCanvas.animate;
+	//this.clicked = ()
 	
 };
 
