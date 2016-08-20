@@ -1,6 +1,14 @@
 var c = document.getElementById("sodaCanvas");
 var ctx = c.getContext("2d");
 var frameRate = 60;
+var offset = {};
+offset.y = c.offsetTop;
+offset.x = c.offsetLeft;
+console.log(offset)
+
+$(c).click(() => {
+		console.log('clciked canvas')
+})
 
 
 function rect(_x, _y, _width, _height, _color) {
@@ -26,7 +34,7 @@ function rect(_x, _y, _width, _height, _color) {
 		return "rgba("+Math.round(this.rColor)+","+Math.round(this.gColor)+","+Math.round(this.bColor)+","+ Math.round(this.aColor) +")";
 	}
 
-	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
+	this.center = () => [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
 	
 	//this.animateColor ?= 
 
@@ -40,4 +48,5 @@ function rect(_x, _y, _width, _height, _color) {
 	this.animate = sodaCanvas.animate;
 	
 };
+
 

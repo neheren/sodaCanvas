@@ -81,11 +81,13 @@ sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 
 				if(currentFrame > totalFrames) {
 					clearInterval(clock) //clearing timer, and resolving promise
+					this[parameter] = newPosition;
 					resolve();
 
 					var indexOfParameter = this.currentlyAnimating.indexOf(parameter); //deleting animations from array.
 					this.currentlyAnimating.splice(indexOfParameter, 1);
 					breakThis = true;
+
 				}
 
 				if(!breakThis) { 

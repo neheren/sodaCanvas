@@ -5,7 +5,6 @@ var bg = new rect(0, 0, 1000, 700, "#EEEEEE");
 bg.center = [0,0]
 var sodaRect = new rect(100, 100, 30, 30, "grey");
 
-console.log('yo')
 
 function draw(event){
 	bg.draw();
@@ -21,8 +20,8 @@ $( document ).ready(() => {
 			gColor: Math.random()*256,
 		}, easing.easeOutExpo, 2000)
 
-		var x = event.clientX;
-		var y = event.clientY;
+		var x = event.clientX - offset.x;
+		var y = event.clientY - offset.y;
 
 		sodaRect.animate({
 			width:100,
@@ -34,5 +33,6 @@ $( document ).ready(() => {
 			width:50,
 			height:50,
 		}, easing.easeInQuad, 1000) )
-	})//.then(()=>loop())
+	})
 })
+
