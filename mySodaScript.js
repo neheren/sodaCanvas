@@ -5,7 +5,6 @@ var bg = new rect(0, 0, 1000, 700, "#EEEEEE");
 bg.center = [0,0]
 var sodaRect = new rect(100, 100, 30, 30, "grey");
 
-
 function draw(event){
 	bg.draw();
 	sodaRect.draw();
@@ -28,7 +27,7 @@ $( document ).ready(() => {
 			height:100,
 			x: x,
 			y: y,
-		}, easing.easeOutExpo, 2000)
+		}, easing.easeInExpo, 1000)
 		.then(() => sodaRect.animate({
 			width:50,
 			height:50,
