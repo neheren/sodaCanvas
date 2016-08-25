@@ -1,6 +1,14 @@
 var c = document.getElementById("sodaCanvas");
 var ctx = c.getContext("2d");
 var frameRate = 60;
+var offset = {};
+offset.y = c.offsetTop;
+offset.x = c.offsetLeft;
+console.log(offset)
+
+$(c).click(() => {
+		console.log('clciked canvas')
+})
 
 var onClick = document.createAttribute("onclick")
 onClick.value = 'mouseClick(event)'
@@ -41,19 +49,8 @@ function rect(_x, _y, _width, _height, _color) {
 		return "rgba("+Math.round(this.rColor)+","+Math.round(this.gColor)+","+Math.round(this.bColor)+","+ (this.aColor) +")";
 	}
 
-	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
-
-	this.clicked = (inpFunction) => {
-		return new Promise((resolve, reject) => {
-			if(mouseClicked){
-				inpFunction();
-				resolve();
-			}
-		})
-
-	}	
-
-
+	this.center = () => [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
+	
 	this.draw = () => {
 
 		ctx.fillStyle = this.rbg(); //could be optimized
@@ -135,3 +132,4 @@ function image(_x, _y, _width, _height, imageLink) {
 	this.animateSingle = sodaCanvas.animateSingle;
 	this.animate = sodaCanvas.animate;
 }
+

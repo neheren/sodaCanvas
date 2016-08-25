@@ -59,3 +59,30 @@ function loop(){
 	}, 2000)
 	setTimeout(() => loop(), 3000);
 }
+
+$( document ).ready(() => {
+	$( document ).click( () => {
+		
+		sodaRect.animate({
+			rColor: Math.random()*256,
+			bColor: Math.random()*256,
+			gColor: Math.random()*256,
+		}, easing.easeOutExpo, 2000)
+
+		var x = event.clientX - offset.x;
+		var y = event.clientY - offset.y;
+
+		sodaRect.animate({
+			width:100,
+			height:100,
+			x: x,
+			y: y,
+		}, easing.easeInExpo, 1000)
+		.then(() => sodaRect.animate({
+			width:50,
+			height:50,
+		}, easing.easeInQuad, 1000) )
+	})
+})
+
+
