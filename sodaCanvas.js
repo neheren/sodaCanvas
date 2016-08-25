@@ -2,20 +2,6 @@ var c = document.getElementById("sodaCanvas");
 var ctx = c.getContext("2d");
 var frameRate = 60;
 
-var onClick = document.createAttribute("onclick")
-onClick.value = 'mouseClick(event)'
-c.setAttributeNode(onClick);
-
-var mouseClicked = false;
-
-function mouseClick(event){
-	console.log(event)
-	mouseClicked = true;
-}
-
-function mouseRelease(event){
-	mouseClicked = false;
-}
 
 
 function rect(_x, _y, _width, _height, _color) {
@@ -36,6 +22,7 @@ function rect(_x, _y, _width, _height, _color) {
 	this.gColor = this.color.green;
 	this.bColor = this.color.blue;
 	this.aColor = this.color.opacity;
+	this.mouseIsOver = false;
 
 	this.rbg = function () {
 		return "rgba("+Math.round(this.rColor)+","+Math.round(this.gColor)+","+Math.round(this.bColor)+","+ (this.aColor) +")";
@@ -44,15 +31,39 @@ function rect(_x, _y, _width, _height, _color) {
 	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
 
 	this.clicked = (inpFunction) => {
-		return new Promise((resolve, reject) => {
-			if(mouseClicked){
-				inpFunction();
-				resolve();
+		c.addEventListener("mousedown", (event) => {
+			if(event.clientX > this.x && event.clientX < this.x + this.width){
+				if(event.clientY > this.y && event.clientY < this.y + this.height){
+					inpFunction();
+				}
 			}
-		})
-
+		});
 	}	
 
+	this.mouseOver = (inpFunction) => {
+		c.addEventListener("mousemove", (event) => {
+			if(event.clientX > this.x && event.clientX < this.x + this.width && event.clientY > this.y && event.clientY < this.y + this.height){
+				if(!this.mouseIsOver){
+					c.style.cursor = 'pointer'
+					inpFunction();
+					this.mouseIsOver = true;
+				}
+			}
+		});
+	}
+
+	this.mouseAway = (inpFunction) => { //should update more than on mouse move?? If so make loop? 
+		c.addEventListener("mousemove", (event) => {
+			if(event.clientX < this.x || event.clientX > this.x + this.width || event.clientY < this.y || event.clientY > this.y + this.height ){
+				console.log('mouse Away inside function')
+				if(this.mouseIsOver){
+					c.style.cursor = ''
+					inpFunction();
+					this.mouseIsOver = false;
+				}
+			}
+		});
+	}
 
 	this.draw = () => {
 
