@@ -2,9 +2,15 @@
 setInterval(() => draw(), (1000/frameRate))
 
 var bg = new rect(0, 0, 1920, 1000, "white");
-bg.center = [0,0]
-var sodaRect = new image(1920/2 - 276/2, 500-276/2 - 5, 200, 200, "logosmall.png");
+bg.center = [0,0];
+var sodaRect = new rect(100, 100, 100, 100, 'black');
+
+sodaRect.clicked(() => sodaRect.animate({width:0, height:0}, easing.easeOutExpo, 1000).then(() => sodaRect.animate({width:100, height:50}, easing.easeOutExpo, 1000)));
+sodaRect.mouseOver(() => console.log('mouseOver'))
+sodaRect.mouseAway(() => console.log('mouseAway'))
+var sodaImg = new image(1920/2 - 276/2, 500-276/2 - 5, 200, 200, "logosmall.png");
 var sodaRects = new Array()
+
 
 for (var i = 0; i < 100; i++) {
 	sodaRects[i] = new rect(20*i, 0, 100, 1000, "white")
@@ -24,7 +30,7 @@ function draw(event){
 //$( document ).ready(() => {
 //sodaRect.clicked((mouseEvent) => console.log(mouseEvent))
 $( document ).click( () => {
-	sodaRect.animate({aColor: 0}, easing.easeInOutExpo, 1000).then(() => sodaRect.animate({aColor:0.6}, easing.easeInOutExpo, 1000))
+	//sodaRect.animate({aColor: 0}, easing.easeInOutExpo, 1000).then(() => sodaRect.animate({aColor:0.6}, easing.easeInOutExpo, 1000))
 })
 
 loop();
@@ -35,8 +41,6 @@ function loop(){
 			width:2,
 		}, easing.easeInOutExpo, 1000)
 	}
-
-	setTimeout(function(){console.log('hej')}, 1000)
 
 	setTimeout(function() {
 	for (var i = 0; i < 100; i++) {
