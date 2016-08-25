@@ -73,7 +73,7 @@ sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 						
 						this.breakAnimation.splice(this.breakAnimation.indexOf(parameter), 1); 			//and from break Array:
 						
-						console.log( 'deleted ' + parameter + ' left: ' + (this.breakAnimation[i] ? this.breakAnimation[i] : 'nothing') );
+						//console.log( 'deleted ' + parameter + ' left: ' + (this.breakAnimation[i] ? this.breakAnimation[i] : 'nothing') );
 						breakThis = true;
 					}
 
