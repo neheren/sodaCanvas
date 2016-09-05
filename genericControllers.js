@@ -130,3 +130,48 @@ sodaCanvas.break = function(parameter) {
 	});
 }
 
+////
+sodaCanvas.clicked = (inpFunction, collision) => {
+	c.addEventListener("mousedown", (event) => {
+		if(collision(event)){
+			inpFunction();
+		}	
+	});
+}	
+////
+sodaCanvas.mouseOver = (inpFunction, collision) => {
+	c.addEventListener("mousemove", (event) => {
+		if(event.clientX > this.x && event.clientX < this.x + this.width && event.clientY > this.y && event.clientY < this.y + this.height){
+			if(!this.mouseIsOver){
+				c.style.cursor = 'pointer'
+				inpFunction();
+				this.mouseIsOver = true;
+			}
+		}
+	});
+}
+
+sodaCanvas.mouseAway = (inpFunction, collision) => { //should update more than on mouse move?? If so make loop? 
+	c.addEventListener("mousemove", (event) => {
+		if(event.clientX < this.x || event.clientX > this.x + this.width || event.clientY < this.y || event.clientY > this.y + this.height ){
+			console.log('mouse Away inside function')
+			if(this.mouseIsOver){
+				c.style.cursor = ''
+				inpFunction();
+				this.mouseIsOver = false;
+			}
+		}
+	});
+}
+
+sodaCanvas.rectCollisionInside = (
+) => { //could be optimized. Doesn' have to send the whole event obj. only x, y.
+	if(event.clientX > this.x && event.clientX < this.x + this.width){
+		if(event.clientY > this.y && event.clientY < this.y + this.height){
+			return true;
+		}
+	}
+}
+
+
+

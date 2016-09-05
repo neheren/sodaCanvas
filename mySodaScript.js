@@ -6,8 +6,8 @@ bg.center = [0,0];
 var sodaRect = new rect(100, 100, 100, 100, 'black');
 
 sodaRect.clicked(() => sodaRect.animate({width:0, height:0}, easing.easeOutExpo, 1000).then(() => sodaRect.animate({width:100, height:50}, easing.easeOutExpo, 1000)));
-sodaRect.mouseOver(() => console.log('mouseOver'))
-sodaRect.mouseAway(() => console.log('mouseAway'))
+//sodaRect.mouseOver(() => console.log('mouseOver'))
+//sodaRect.mouseAway(() => console.log('mouseAway'))
 var sodaImg = new image(1920/2 - 276/2, 500-276/2 - 5, 200, 200, "logosmall.png");
 var sodaRects = new Array()
 
