@@ -24,7 +24,8 @@ animate() returns a promise when the animation is complete:
 sodaRect.animate({
 	width:200,
 	height:200,
-}.then(() => sodaRect.animate({
+}.then(() => 
+sodaRect.animate({
 	width:50,
 	height:50,
 }, easing.easeInQuad, 1000) ))
