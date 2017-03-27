@@ -30,7 +30,7 @@ function draw(event){
 //$( document ).ready(() => {
 //sodaRect.clicked((mouseEvent) => console.log(mouseEvent))
 $( document ).click( () => {
-	//sodaRect.animate({aColor: 0}, easing.easeInOutExpo, 1000).then(() => sodaRect.animate({aColor:0.6}, easing.easeInOutExpo, 1000))
+	sodaRect.animate({aColor: 0}, easing.easeInOutExpo, 1000).then(() => sodaRect.animate({aColor:0.6}, easing.easeInOutExpo, 1000))
 })
 
 loop();
@@ -38,19 +38,19 @@ function loop(){
 
 	for (var i = 0; i < 100; i++) {
 		sodaRects[i].animate({
-			width:2,
+			width:5,
 		}, easing.easeInOutExpo, 1000)
 	}
 
 	setTimeout(function() {
-	for (var i = 0; i < 100; i++) {
-		sodaRects[i].animate({
-			rColor: Math.random() * 256*2 + 100,
-			bColor: Math.random() * 0 + 100,
-			gColor: Math.random() * 256/3 + 100,
-			height: Math.random() * 500 + 250,
-		}, easing.easeInOutExpo, 1000)
-	}
+		for (var i = 0; i < 100; i++) {
+			sodaRects[i].animate({
+				rColor: Math.random() * 256*2 + 100,
+				bColor: Math.random() * 0 + 100,
+				gColor: Math.random() * 256/3 + 100,
+				height: Math.random() * 500 + 250,
+			}, easing.easeInOutExpo, 1000)
+		}
 	}, 1000);
 
 	setTimeout(() => {
