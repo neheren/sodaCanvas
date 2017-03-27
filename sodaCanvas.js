@@ -38,40 +38,7 @@ function rect(_x, _y, _width, _height, _color) {
 
 	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
 
-	this.clicked = (inpFunction) => {
-		c.addEventListener("mousedown", (event) => {
-			if(event.clientX > this.x && event.clientX < this.x + this.width){
-				if(event.clientY > this.y && event.clientY < this.y + this.height){
-					inpFunction();
-				}
-			}
-		});
-	}	
 
-	this.mouseOver = (inpFunction) => {
-		c.addEventListener("mousemove", (event) => {
-			if(event.clientX > this.x && event.clientX < this.x + this.width && event.clientY > this.y && event.clientY < this.y + this.height){
-				if(!this.mouseIsOver){
-					c.style.cursor = 'pointer'
-					inpFunction();
-					this.mouseIsOver = true;
-				}
-			}
-		});
-	}
-
-	this.mouseAway = (inpFunction) => { //should update more than on mouse move?? If so make loop? 
-		c.addEventListener("mousemove", (event) => {
-			if(event.clientX < this.x || event.clientX > this.x + this.width || event.clientY < this.y || event.clientY > this.y + this.height ){
-				console.log('mouse Away inside function')
-				if(this.mouseIsOver){
-					c.style.cursor = ''
-					inpFunction();
-					this.mouseIsOver = false;
-				}
-			}
-		});
-	}
 
 	this.center = () => [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
 	
@@ -81,8 +48,10 @@ function rect(_x, _y, _width, _height, _color) {
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 	};
 
-	
-	
+	this.clicked = (inpFunction) =>
+		sodaCanvas.clicked(inpFunction, sodaCanvas.rectCollisionInside);
+
+
 	this.break = sodaCanvas.break
 	this.animateSingle = sodaCanvas.animateSingle;
 	this.animate = sodaCanvas.animate;
