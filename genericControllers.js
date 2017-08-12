@@ -131,43 +131,45 @@ sodaCanvas.break = function(parameter) {
 }
 
 ////
-sodaCanvas.clicked = (inpFunction, collision) => {
-	c.addEventListener("mousedown", (event) => {
-		if(collision(event)){
+sodaCanvas.clicked = (inpFunction, collision, object) => {
+	c.addEventListener("mousedown", function(event) {
+		console.log(object)
+		if(collision(event, object)){
+			console.log("clicked")
 			inpFunction();
 		}	
 	});
 }	
+
 ////
-sodaCanvas.mouseOver = (inpFunction, collision) => {
+sodaCanvas.mouseOver = (inpFunction, collision, object) => {
 	c.addEventListener("mousemove", (event) => {
-		if(event.clientX > this.x && event.clientX < this.x + this.width && event.clientY > this.y && event.clientY < this.y + this.height){
-			if(!this.mouseIsOver){
+		if(event.clientX > object.x && event.clientX < object.x + object.width && event.clientY > object.y && event.clientY < object.y + object.height){
+			if(!object.mouseIsOver) {
 				c.style.cursor = 'pointer'
 				inpFunction();
-				this.mouseIsOver = true;
+				object.mouseIsOver = true;
 			}
 		}
 	});
 }
 
-sodaCanvas.mouseAway = (inpFunction, collision) => { //should update more than on mouse move?? If so make loop? 
+sodaCanvas.mouseAway = (inpFunction, collision, object) => { //should update more than on mouse move?? If so make loop? 
 	c.addEventListener("mousemove", (event) => {
-		if(event.clientX < this.x || event.clientX > this.x + this.width || event.clientY < this.y || event.clientY > this.y + this.height ){
+		if(event.clientX < object.x || event.clientX > object.x + object.width || event.clientY < object.y || event.clientY > object.y + object.height ){
 			console.log('mouse Away inside function')
-			if(this.mouseIsOver){
+			if(object.mouseIsOver){
 				c.style.cursor = ''
 				inpFunction();
-				this.mouseIsOver = false;
+				object.mouseIsOver = false;
 			}
 		}
 	});
 }
 
-sodaCanvas.rectCollisionInside = (
-) => { //could be optimized. Doesn' have to send the whole event obj. only x, y.
-	if(event.clientX > this.x && event.clientX < this.x + this.width){
-		if(event.clientY > this.y && event.clientY < this.y + this.height){
+sodaCanvas.rectCollisionInside = function(event, object) { //could be optimized. Doesn' have to send the whole event obj. only x, y.
+	if(event.clientX > object.x && event.clientX < object.x + object.width){
+		if(event.clientY > object.y && event.clientY < object.y + object.height){
 			return true;
 		}
 	}

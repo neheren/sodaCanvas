@@ -1,14 +1,8 @@
-var c = document.getElementById("sodaCanvas");
-var ctx = c.getContext("2d");
-var frameRate = 60;
-var offset = {};
-offset.y = c.offsetTop;
-offset.x = c.offsetLeft;
-console.log(offset)
+// sodaCanvas.js is written by Nikolaj Schlüter Nielsen licenced under MIT
 
-$(c).click(() => {
-		console.log('clciked canvas')
-})
+function sodaLoop(func, fps) {
+	return setInterval(() => func(), (1000/fps))
+}
 
 
 
@@ -49,15 +43,20 @@ function rect(_x, _y, _width, _height, _color) {
 	};
 
 	this.clicked = (inpFunction) =>
-		sodaCanvas.clicked(inpFunction, sodaCanvas.rectCollisionInside);
+		sodaCanvas.clicked(inpFunction, sodaCanvas.rectCollisionInside, this);
 
+	this.mouseOver = (inpFunction) => sodaCanvas.mouseOver(inpFunction, sodaCanvas.rectCollisionInside, this)
+	this.mouseAway = (inpFunction) => sodaCanvas.mouseAway(inpFunction, sodaCanvas.rectCollisionInside, this)
 
 	this.break = sodaCanvas.break
 	this.animateSingle = sodaCanvas.animateSingle;
 	this.animate = sodaCanvas.animate;
-	//this.clicked = ()
 	
 };
+
+
+
+
 
 function circle(_x, _y, _radius, _color) {
 	this.emptyPromise = (parameter) => new Promise((resolve, reject) => resolve()) 
