@@ -35,10 +35,9 @@ $( document ).click( () => {
 
 loop();
 function loop(){
-
 	for (var i = 0; i < 100; i++) {
 		sodaRects[i].animate({
-			width:2,
+			width:5,
 		}, easing.easeInOutExpo, 1000)
 	}
 

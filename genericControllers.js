@@ -66,7 +66,7 @@ sodaCanvas.animateSingle = function(parameter, newPosition, easing, totalTime) {
 				var percentageDone = currentFrame / totalFrames; 
 
 				for (var i = 0; i < this.breakAnimation.length; i++) {
-					if(this.breakAnimation[i] === parameter){ // if i
+					if(this.breakAnimation[i] === parameter){ // if animation is already running, or it is breaked by the method .break()
 						clearInterval(clock);
 
 						this.currentlyAnimating.splice(this.currentlyAnimating.indexOf(parameter), 1); 	//deleting animations from array:

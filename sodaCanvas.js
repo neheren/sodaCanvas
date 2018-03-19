@@ -7,7 +7,7 @@ offset.x = c.offsetLeft;
 console.log(offset)
 
 $(c).click(() => {
-		console.log('clciked canvas')
+	console.log('clciked canvas')
 })
 
 
@@ -36,7 +36,10 @@ function rect(_x, _y, _width, _height, _color) {
 		return "rgba("+Math.round(this.rColor)+","+Math.round(this.gColor)+","+Math.round(this.bColor)+","+ (this.aColor) +")";
 	}
 
-	this.center = [this.width/2, this.height/2]; // not opdated when w / h is changed.. Should be done via get/set
+	this.center = {
+		x: this.width/2,
+		y: this.height/2
+	} // not opdated when w / h is changed.. Should be done via get/set
 
 
 
